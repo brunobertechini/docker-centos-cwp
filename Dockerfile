@@ -77,7 +77,33 @@ WORKDIR /
 #
 # FTP
 #
+RUN adduser web -d /usr/local/apache/htdocs/html -c "Web FTP User" --no-create-home --non-unique --uid 99 --gid 99
+RUN echo web | passwd web --stdin
+RUN cp /etc/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd.conf.orig
 COPY vsftpd.conf /etc/vsftpd/vsftpd.conf
+
+#
+# Disable suphp
+#
+RUN cp /usr/local/src/cwp/php-5.4.27/libs/libphp5.so /usr/local/apache/modules/
+RUN cp /usr/local/apache/conf.d/suphp.conf /usr/local/apache/conf.d/suphp.conf.orig
+RUN sed -i -e "s/suPHP_Engine on/suPHP_Engine off/" /usr/local/apache/conf.d/suphp.conf
+
+#
+# HTTP
+#
+RUN cp /usr/local/apache/conf/httpd.conf /usr/local/apache/conf/httpd.conf.orig
+COPY httpd.conf /usr/local/apache/conf/httpd.conf
+
+#
+# MySQL Password
+#
+RUN /usr/bin/mysqladmin -u root password 'mysql'
+
+#
+# Root Password
+#
+RUN echo admin | passwd root --stdin
 
 #
 # SUPERVISOR
