@@ -26,9 +26,8 @@ RUN yum clean all
 # CWP - Centos Web Panel
 #
 WORKDIR /usr/local/src
-RUN wget http://centos-webpanel.com/cwp-latest
-RUN sed -i -e "/^shutdown/c\ " cwp-latest
-RUN sed -i -e "/^read -p/c\ " cwp-latest
+COPY cwp-latest /usr/local/src/cwp-latest
+RUN chmod +x /usr/local/src/cwp-latest
 RUN sh cwp-latest
 
 #
@@ -98,7 +97,8 @@ COPY httpd.conf /usr/local/apache/conf/httpd.conf
 #
 # MySQL Password
 #
-RUN /usr/bin/mysqladmin -u root password 'mysql'
+mysql_root_password=`cat /root/.my.cnf |grep password= | tr "=" " " | awk '{print$2}'`
+RUN /usr/bin/mysqladmin -u root -p $mysql_root_password password 'mysql'
 
 #
 # Root Password
@@ -119,6 +119,6 @@ RUN echo "files=/etc/supervisor/conf.d/*.conf" >> /etc/supervisor/supervisord.co
 EXPOSE 80 2030 3306 21 20 4242 4243
 
 #
-# Start Supervisor in foreground
+# Entrypoint Script
 #
 ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
