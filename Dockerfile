@@ -85,9 +85,9 @@ COPY vsftpd.conf /etc/vsftpd/vsftpd.conf
 #
 # Disable suphp
 #
-RUN cp /usr/local/src/cwp/php-5.4.27/libs/libphp5.so /usr/local/apache/modules/
-RUN cp /usr/local/apache/conf.d/suphp.conf /usr/local/apache/conf.d/suphp.conf.orig
-RUN sed -i -e "s/suPHP_Engine on/suPHP_Engine off/" /usr/local/apache/conf.d/suphp.conf
+#RUN cp /usr/local/src/cwp/php-5.4.27/libs/libphp5.so /usr/local/apache/modules/
+#RUN cp /usr/local/apache/conf.d/suphp.conf /usr/local/apache/conf.d/suphp.conf.orig
+#RUN sed -i -e "s/suPHP_Engine on/suPHP_Engine off/" /usr/local/apache/conf.d/suphp.conf
 
 #
 # HTTP
